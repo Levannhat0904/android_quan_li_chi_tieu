@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.graphics.Camera;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -12,7 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
-    private ViewPager2 viewPager2;
+    public ViewPager2 viewPager2;
+    Camera camera;
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.nav_home)
                     viewPager2.setCurrentItem(0);
-                else if(item.getItemId()==R.id.nav_timkiem)
+                else if(item.getItemId()==R.id.nav_phanloai)
                     viewPager2.setCurrentItem(1);
                 else if(item.getItemId()==R.id.nav_thongke)
                     viewPager2.setCurrentItem(2);

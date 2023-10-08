@@ -2,19 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <item
     android:id="@+id/nav_home"
-    android:icon="@drawable/menu"
+    android:icon="@drawable/home_50"
     android:title="Home" />
 <item
-    android:id="@+id/nav_timkiem"
-    android:icon="@drawable/menu"
-    android:title="tim_kiem" />
+    android:id="@+id/nav_phanloai"
+    android:icon="@drawable/categorize_100"
+    android:title="Phân loại" />
 <item
     android:id="@+id/nav_thongke"
-    android:icon="@drawable/menu"
+    android:icon="@drawable/circle_chart_100"
     android:title="thống kê" />
 <item
     android:id="@+id/nav_info_user"
-    android:icon="@drawable/menu"
+    android:icon="@drawable/user"
     android:title="info_user" />
 
 

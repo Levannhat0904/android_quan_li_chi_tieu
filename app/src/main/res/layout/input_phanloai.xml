@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Phân loại"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:background="#B89A9A"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icons8_address_60"
+            android:id="@+id/image_select"/>
+
+            <EditText
+                android:id="@+id/editTextExpenseType"
+                android:layout_width="270dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="djjfdjfdj" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="0dp"
+                android:id="@+id/imageButtonBack"
+                android:src="@drawable/select" />
+
+
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridLayout
+            android:id="@+id/gridLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="4"
+            android:layout_gravity="center">
+
+            <!-- Các biểu tượng sẽ được thêm tự động bằng mã Java -->
+
+        </GridLayout>
+    </ScrollView>
+
+</LinearLayout>
+

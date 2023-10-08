@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.phanloai.ChitieuFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="chi tieu fragment" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/test"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/lv_chitieu"
+        android:layout_height="match_parent"
+    android:layout_below="@id/test"
+    android:layout_above="@id/button_thaotac"
+    android:divider="@android:color/darker_gray"
+    android:dividerHeight="1dp"
+    android:layout_marginTop="8dp">
+
+
+</ListView>
+    <ImageButton
+        android:id="@+id/button_thaotac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="50px"
+        android:src="@drawable/add_icon"
+        android:background="@android:color/transparent" />
+</FrameLayout>

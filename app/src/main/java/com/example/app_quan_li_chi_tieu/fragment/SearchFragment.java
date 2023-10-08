@@ -3,6 +3,7 @@ package com.example.app_quan_li_chi_tieu.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.ListView;
 import com.example.app_quan_li_chi_tieu.Adapter_cat;
 import com.example.app_quan_li_chi_tieu.Cat;
 import com.example.app_quan_li_chi_tieu.R;
+import com.example.app_quan_li_chi_tieu.adapter_phanloai.viewpager_adapter_phanloai;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 
@@ -63,26 +67,27 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootview=inflater.inflate(R.layout.fragment_search,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 
-        int img[]={R.drawable.menu,R.drawable.menu,R.drawable.menu,R.drawable.menu};
-        String name[]={"Hôm nay","Tuần này","Tháng này","Năm nay"};
-        //khai bao listview
-        ArrayList<Cat> catArrayList;
-        ListView listView;
-        Adapter_cat adapter_cat;
-        listView = rootview.findViewById(R.id.listview);
-        catArrayList = new ArrayList<>();
-        for (int i=0;i<img.length;i++){
-            Cat cat = new Cat(img[i],name[i]);
-            catArrayList.add(cat);
-        }
-        adapter_cat = new Adapter_cat(getActivity(),R.layout.custom_lv,catArrayList);
-        listView.setAdapter(adapter_cat);
-        // Inflate the layout for this fragment
-        return rootview;
-        //return inflater.inflate(R.layout.fragment_search, container, false);
+        // Khởi tạo TabLayout và ViewPager2 từ layout
+        TabLayout mTabLayout = rootView.findViewById(R.id.tab_layout_phanloai);
+        ViewPager2 mViewPager2 = rootView.findViewById(R.id.viewPager_phanloai);
+
+        // Khởi tạo adapter và thiết lập cho ViewPager2
+        viewpager_adapter_phanloai adapter = new viewpager_adapter_phanloai(this);
+        mViewPager2.setAdapter(adapter);
+
+        // Kết nối TabLayout và ViewPager2 với nhau
+        new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> {
+            // Đặt tiêu đề cho từng tab tại vị trí tương ứng
+            if (position == 0) {
+                tab.setText("Chi tiêu");
+            } else if (position == 1) {
+                tab.setText("Thu nhập");
+            }
+        }).attach();
+
+        return rootView;
     }
 }
