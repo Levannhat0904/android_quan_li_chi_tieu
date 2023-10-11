@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.app_quan_li_chi_tieu.fragment.phanloai.ChitieuFragment;
-import com.example.app_quan_li_chi_tieu.fragment.phanloai.ThunhapFragment;
+import com.example.app_quan_li_chi_tieu.fragment.ThunhapFragment;
 
 public class viewpager_adapter_phanloai extends FragmentStateAdapter {
     public viewpager_adapter_phanloai(@NonNull Fragment fragment) {

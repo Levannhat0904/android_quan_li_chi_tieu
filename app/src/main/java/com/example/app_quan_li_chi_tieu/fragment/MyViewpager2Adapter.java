@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.app_quan_li_chi_tieu.fragment.home.HomeFragment;
+import com.example.app_quan_li_chi_tieu.fragment.phanloai.PhanloaiFragment;
+
 public class MyViewpager2Adapter extends FragmentStateAdapter
 {
     public MyViewpager2Adapter(@NonNull FragmentActivity fragmentActivity) {
@@ -20,7 +23,7 @@ public class MyViewpager2Adapter extends FragmentStateAdapter
                 case 0:
                     return new HomeFragment();
                 case 1:
-                    return new SearchFragment();
+                    return new PhanloaiFragment();
                 case 2:
                     return new ThongkeFragment();
                 case 3:

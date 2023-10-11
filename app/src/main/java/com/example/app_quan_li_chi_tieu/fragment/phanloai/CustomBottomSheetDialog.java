@@ -1,59 +1,49 @@
 package com.example.app_quan_li_chi_tieu.fragment.phanloai;
 
+import com.example.app_quan_li_chi_tieu.category.Category;
+import com.example.app_quan_li_chi_tieu.category.CategoryAdapter;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.app_quan_li_chi_tieu.R;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_chitieu;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
-public class input_view extends AppCompatActivity
-{
+public class CustomBottomSheetDialog extends BottomSheetDialog {
     private DatabaseHelper_chitieu dbHelper;
-     int resID_img;//lưu id ảnh đã chọn
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> expenseList = new ArrayList<>();
+    private CategoryAdapter categoryAdapter;
+    int resID_img; // Lưu id ảnh đã chọn
     private EditText txtImage; // EditText để hiển thị tên ảnh đã chọn
     private ImageView imageSelect; // ImageView để hiển thị ảnh đã chọn
     private ImageView selectedIcon = null; // Để lưu trữ biểu tượng được chọn
-    private void addToDatabase(String name, int img) {
-        dbHelper = new DatabaseHelper_chitieu(this); // Khởi tạo đối tượng dbHelper
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper_chitieu.COLUMN_EXPENSE_TYPE, name);
-        values.put(DatabaseHelper_chitieu.COLUMN_EXPENSE_IMG, img);
-        long newRowId = db.insert(DatabaseHelper_chitieu.TABLE_NAME, null, values);
 
-        db.close();
-        Toast.makeText(this, "Thêm dữ liệu thành công!", Toast.LENGTH_SHORT).show();
-        // Sau khi thêm vào cơ sở dữ liệu, cập nhật danh sách loại chi tiêu và thông báo Adapter
-//        loadExpenseData();
+    public CustomBottomSheetDialog(Context context) {
+        super(context);
+        setContentView(R.layout.input_phanloai);
     }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.input_phanloai);
-        // Tạo một GridLayout để chứa các biểu tượng
-        GridLayout gridLayout = findViewById(R.id.gridLayout);
-        txtImage = findViewById(R.id.editTextExpenseType); // Ánh xạ EditText
-        String receivedData = getIntent().getStringExtra("data");
 
-        // Xử lý dữ liệu, ví dụ: hiển thị dữ liệu trong TextView
-        txtImage.setText(receivedData);
+        txtImage = findViewById(R.id.editTextExpenseType); // Ánh xạ EditText
         imageSelect = findViewById(R.id.image_select); // Ánh xạ ImageView
         // Lấy danh sách tên tất cả các tài nguyên drawable trong thư mục res/drawable
         Field[] drawables = R.drawable.class.getFields();
@@ -62,26 +52,30 @@ public class input_view extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 // Khi bấm vào ImageButton, quay lại hoạt động trước đó
-                EditText edt_loai=findViewById(R.id.editTextExpenseType);
-                edt_loai.setText(resID_img+"");
+                EditText edt_loai = findViewById(R.id.editTextExpenseType);
+//                edt_loai.setText(resID_img + "");
                 addToDatabase(edt_loai.getText().toString(), resID_img);
-//                onBackPressed();
-                finish();
+                dismiss();
             }
         });
+
+        // Tạo một GridLayout để chứa các biểu tượng
+        GridLayout gridLayout = findViewById(R.id.gridLayout);
 
         // Duyệt qua danh sách tên tài nguyên và hiển thị các biểu tượng
         for (Field drawableField : drawables) {
             try {
                 String drawableName = drawableField.getName();
-                // Kiểm tra nếu tên tài nguyên bắt đầu bằng "icon_"
+                // Kiểm tra nếu tên tài nguyên bắt đầu bằng "icons"
                 if (drawableName.startsWith("icons")) {
-                    int resID = getResources().getIdentifier(drawableName, "drawable", getPackageName());
-                    Drawable iconDrawable = getResources().getDrawable(resID);
-
-                    ImageView imageView = new ImageView(this);
+                    int resID = getContext().getResources().getIdentifier(drawableName, "drawable", getContext().getPackageName());
+                    Drawable iconDrawable = getContext().getResources().getDrawable(resID);
+                    ImageView imageView = new ImageView(getContext());
                     imageView.setImageDrawable(iconDrawable);
+//                    imageView.setPadding(50, 10, 50, 10);
+
                     imageView.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f), GridLayout.spec(GridLayout.UNDEFINED, 1f)));
+
 //                    imageView.setLayoutParams(new GridLayout.LayoutParams());
                     gridLayout.addView(imageView);
                     // Đặt sự kiện click cho ImageView
@@ -93,18 +87,11 @@ public class input_view extends AppCompatActivity
                                 selectedIcon.clearColorFilter();
                             }
                             // Thay đổi màu của biểu tượng khi click
-                            imageView.setColorFilter(getResources().getColor(android.R.color.holo_blue_light));
+                            imageView.setColorFilter(getContext().getResources().getColor(android.R.color.holo_blue_light));
                             selectedIcon = imageView;
-                            txtImage.setText(resID+"");
-                            String s= "R.drawable."+drawableName;
-                            resID_img =resID;
+//                            txtImage.setText(resID + "");
+                            resID_img = resID;
                             imageSelect.setImageResource(resID);
-                            // Lấy tên tài nguyên từ drawableName
-                            String resourceName = drawableName;
-                            // Hoặc lấy ID của tài nguyên từ resID
-                            int resourceId = resID;
-                            // Hiển thị tên hoặc ID trong một Toast hoặc làm gì đó khác
-//                            Toast.makeText(input_view.this, "Resource Name: " + resourceId, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -113,4 +100,19 @@ public class input_view extends AppCompatActivity
             }
         }
     }
+
+    private void addToDatabase(String name, int img) {
+        dbHelper = new DatabaseHelper_chitieu(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper_chitieu.COLUMN_EXPENSE_TYPE, name);
+        values.put(DatabaseHelper_chitieu.COLUMN_EXPENSE_IMG, img);
+        long newRowId = db.insert(DatabaseHelper_chitieu.TABLE_NAME, null, values);
+        db.close();
+
+        Toast.makeText(getContext(), "Thêm dữ liệu thành công!", Toast.LENGTH_SHORT).show();
+    }
+
+
+
 }
