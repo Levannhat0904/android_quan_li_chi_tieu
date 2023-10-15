@@ -40,7 +40,6 @@
                 android:id="@+id/imageButtonBack"
                 android:src="@drawable/select" />
 
-
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"

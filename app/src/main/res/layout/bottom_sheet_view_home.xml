@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Chi tiêu"
+        android:id="@+id/chi_tieu" />
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Thu nhập"
+        android:id="@+id/thu_nhap" />
+</LinearLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/lv_bottom_sheet_home"
+        android:layout_height="500dp"
+        android:layout_below="@id/title"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:layout_marginTop="8dp">
+    </ListView>
+
+
+    <!-- Thêm các thành phần giao diện khác dựa trên nhu cầu của bạn -->
+
+</LinearLayout>

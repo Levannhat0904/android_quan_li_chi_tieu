@@ -3,16 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.home.HomeFragment">
+    tools:context=".fragment.phanloai.ChitieuFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ImageButton
-        android:id="@+id/button_thaotac"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="50px"
-        android:src="@drawable/add_icon"
-        android:background="@android:color/transparent" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/huhu"
+        android:layout_height="match_parent">
+        <ListView
+            android:layout_width="match_parent"
+            android:id="@+id/lv_home"
+            android:layout_height="match_parent"
+            android:layout_below="@id/title"
+            android:layout_above="@id/button_thaotac"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
+            android:layout_marginTop="8dp">
+        </ListView>
+        <ImageButton
+            android:id="@+id/button_thaotac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="50px"
+            android:src="@drawable/add_icon"
+            android:background="@android:color/transparent" />
 
+    </FrameLayout>
 </FrameLayout>

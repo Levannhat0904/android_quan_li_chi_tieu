@@ -11,14 +11,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.example.app_quan_li_chi_tieu.Chi_tieu.ChiTieu;
+import com.example.app_quan_li_chi_tieu.Chi_tieu.ChiTieuAdapter;
 import com.example.app_quan_li_chi_tieu.R;
-import com.example.app_quan_li_chi_tieu.category.Category;
-import com.example.app_quan_li_chi_tieu.category.CategoryAdapter;
+import com.example.app_quan_li_chi_tieu.DanhMuc.Category;
+import com.example.app_quan_li_chi_tieu.DanhMuc.CategoryAdapter;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_chitieu;
-import com.example.app_quan_li_chi_tieu.fragment.phanloai.CustomBottomSheetDialog;
+import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
+import com.example.app_quan_li_chi_tieu.fragment.phanloai.ThunhapFragment;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,8 +36,9 @@ public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private DatabaseHelper_chitieu dbHelper;
-    private CategoryAdapter categoryAdapter;
+    private DatabaseHelper_chitieu dbHelper_chitieu;
+    private ChiTieuAdapter chiTieuAdapter;
+//    DatabaseHelper_chitieu db;
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
@@ -40,7 +46,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     public HomeFragment() {
-        // Required empty public constructor
+
     }
 
     /**
@@ -60,7 +66,6 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,22 +74,37 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
+    }
+    private void initializeDatabaseHelper() {
+        dbHelper_chitieu = new DatabaseHelper_chitieu(getActivity());
+        chiTieuAdapter = new ChiTieuAdapter(getActivity(), new ArrayList<>());
+
+        dbHelper_chitieu.getWritableDatabase(); // Mở cơ sở dữ liệu ở đây
+        loadCategoryData();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+//        loadCategoryData();
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_chitieu, container, false);
+        initializeDatabaseHelper();
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+//        hiển thị listview
+        ListView listView = rootView.findViewById(R.id.lv_home);
+        listView.setAdapter(chiTieuAdapter);
 
         rootView.findViewById(R.id.button_thaotac).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Tạo một BottomSheetDialog
-                CustomBottomSheetDialog bottomSheetDialog = new CustomBottomSheetDialog(view.getContext());
+                CustomBottomSheetDialog_home bottomSheetDialog = new CustomBottomSheetDialog_home(view.getContext());
 
                 // Bây giờ, bạn cần gắn nội dung (layout) cho BottomSheetDialog.
                 // Ví dụ, bạn có thể sử dụng LayoutInflater để nạp một tệp layout XML:
-                View bottomSheetView = getLayoutInflater().inflate(R.layout.input_phanloai, null);
+                View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_view_home, null);
 
                 // Gắn layout cho BottomSheetDialog
                 bottomSheetDialog.setContentView(bottomSheetView);
@@ -103,35 +123,39 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
     private void loadCategoryData() {
-        List<Category> categoryList = getCategoryDataFromSQLite();
-        categoryAdapter.clear();
-        categoryAdapter.addAll(categoryList);
-        categoryAdapter.notifyDataSetChanged();
+        List<ChiTieu> ChiTieuList = getChiTieuDataFromSQLite();
+        chiTieuAdapter.clear();
+        chiTieuAdapter.addAll(ChiTieuList);
+        chiTieuAdapter.notifyDataSetChanged();
     }
 
-    private List<Category> getCategoryDataFromSQLite() {
-        List<Category> categoryList = new ArrayList<>();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+    private List<ChiTieu> getChiTieuDataFromSQLite() {
+        List<ChiTieu> ChiTieuList = new ArrayList<>();
+        SQLiteDatabase db_chitieu = dbHelper_chitieu.getReadableDatabase();
 
         try {
-            Cursor cursor = db.rawQuery("SELECT * FROM chi_tieu", null);
-
+            Cursor cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME, null);
+//
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_ID));
-                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_EXPENSE_TYPE));
-                int image = cursor.getInt(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_EXPENSE_IMG));
+                int price = cursor.getInt(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_PRICE));
+                int cat_id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_CAT_ID)); // Thay đổi tên cột
+                String dateString = cursor.getString(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_DATE));
+//                Date date = new Date(dateString); // Chuyển đổi ngày tháng từ chuỗi sang đối tượng Date
+                String note = cursor.getString(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_NOTE));
 
-                Category category = new Category(id, name, image);
-                categoryList.add(category);
+                ChiTieu chiTieu = new ChiTieu(id, price, dateString, cat_id, note);
+                ChiTieuList.add(chiTieu);
             }
 
             cursor.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            db_chitieu.close();
         }
 
-        return categoryList;
+        return ChiTieuList;
     }
+
 }

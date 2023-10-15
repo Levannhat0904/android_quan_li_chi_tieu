@@ -1,7 +1,6 @@
 package com.example.app_quan_li_chi_tieu.fragment.phanloai;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,28 +15,28 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.app_quan_li_chi_tieu.R;
-import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_chitieu;
+import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-public class input_view extends AppCompatActivity
+public class Them_chi_tieu extends AppCompatActivity
 {
-    private DatabaseHelper_chitieu dbHelper;
+    private DatabaseHelper_phanloai dbHelper;
      int resID_img;//lưu id ảnh đã chọn
     private ArrayAdapter<String> adapter;
     private ArrayList<String> expenseList = new ArrayList<>();
     private EditText txtImage; // EditText để hiển thị tên ảnh đã chọn
     private ImageView imageSelect; // ImageView để hiển thị ảnh đã chọn
     private ImageView selectedIcon = null; // Để lưu trữ biểu tượng được chọn
-    private void addToDatabase(String name, int img) {
-        dbHelper = new DatabaseHelper_chitieu(this); // Khởi tạo đối tượng dbHelper
+    private void addToDatabase(String name, int img, String type) {
+        dbHelper = new DatabaseHelper_phanloai(this); // Khởi tạo đối tượng dbHelper
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper_chitieu.COLUMN_EXPENSE_TYPE, name);
-        values.put(DatabaseHelper_chitieu.COLUMN_EXPENSE_IMG, img);
-        long newRowId = db.insert(DatabaseHelper_chitieu.TABLE_NAME, null, values);
-
+        values.put(DatabaseHelper_phanloai.COLUMN_EXPENSE_NAME, name);
+        values.put(DatabaseHelper_phanloai.COLUMN_TYPE, type);
+        values.put(DatabaseHelper_phanloai.COLUMN_EXPENSE_IMG, img);
+        long newRowId = db.insert(DatabaseHelper_phanloai.TABLE_NAME, null, values);
         db.close();
         Toast.makeText(this, "Thêm dữ liệu thành công!", Toast.LENGTH_SHORT).show();
         // Sau khi thêm vào cơ sở dữ liệu, cập nhật danh sách loại chi tiêu và thông báo Adapter
@@ -64,7 +63,8 @@ public class input_view extends AppCompatActivity
                 // Khi bấm vào ImageButton, quay lại hoạt động trước đó
                 EditText edt_loai=findViewById(R.id.editTextExpenseType);
                 edt_loai.setText(resID_img+"");
-                addToDatabase(edt_loai.getText().toString(), resID_img);
+                String type ="ChiTieu";
+                addToDatabase(edt_loai.getText().toString(), resID_img, type);
 //                onBackPressed();
                 finish();
             }
@@ -104,7 +104,7 @@ public class input_view extends AppCompatActivity
                             // Hoặc lấy ID của tài nguyên từ resID
                             int resourceId = resID;
                             // Hiển thị tên hoặc ID trong một Toast hoặc làm gì đó khác
-//                            Toast.makeText(input_view.this, "Resource Name: " + resourceId, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(Them_chi_tieu.this, "Resource Name: " + resourceId, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

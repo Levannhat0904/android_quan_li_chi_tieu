@@ -1,12 +1,7 @@
 package com.example.app_quan_li_chi_tieu.fragment.phanloai;
 
-import com.example.app_quan_li_chi_tieu.category.Category;
-import com.example.app_quan_li_chi_tieu.category.CategoryAdapter;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -18,22 +13,21 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.app_quan_li_chi_tieu.R;
-import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_chitieu;
+import com.example.app_quan_li_chi_tieu.DanhMuc.CategoryAdapter;
+import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
-public class CustomBottomSheetDialog extends BottomSheetDialog {
-    private DatabaseHelper_chitieu dbHelper;
+public class CustomBottomSheetDialog_thu_nhap extends BottomSheetDialog {
+    private DatabaseHelper_phanloai dbHelper;
     private CategoryAdapter categoryAdapter;
     int resID_img; // Lưu id ảnh đã chọn
     private EditText txtImage; // EditText để hiển thị tên ảnh đã chọn
     private ImageView imageSelect; // ImageView để hiển thị ảnh đã chọn
     private ImageView selectedIcon = null; // Để lưu trữ biểu tượng được chọn
 
-    public CustomBottomSheetDialog(Context context) {
+    public CustomBottomSheetDialog_thu_nhap(Context context) {
         super(context);
         setContentView(R.layout.input_phanloai);
     }
@@ -48,13 +42,16 @@ public class CustomBottomSheetDialog extends BottomSheetDialog {
         // Lấy danh sách tên tất cả các tài nguyên drawable trong thư mục res/drawable
         Field[] drawables = R.drawable.class.getFields();
         ImageButton imageButtonBack = findViewById(R.id.imageButtonBack);
+
+
         imageButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Khi bấm vào ImageButton, quay lại hoạt động trước đó
                 EditText edt_loai = findViewById(R.id.editTextExpenseType);
 //                edt_loai.setText(resID_img + "");
-                addToDatabase(edt_loai.getText().toString(), resID_img);
+                String type = "thu_nhap";
+                addToDatabase(edt_loai.getText().toString(), resID_img, type);
                 dismiss();
             }
         });
@@ -101,17 +98,21 @@ public class CustomBottomSheetDialog extends BottomSheetDialog {
         }
     }
 
-    private void addToDatabase(String name, int img) {
-        dbHelper = new DatabaseHelper_chitieu(getContext());
+    private void addToDatabase(String name, int img, String type) {
+        dbHelper = new DatabaseHelper_phanloai(getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper_chitieu.COLUMN_EXPENSE_TYPE, name);
-        values.put(DatabaseHelper_chitieu.COLUMN_EXPENSE_IMG, img);
-        long newRowId = db.insert(DatabaseHelper_chitieu.TABLE_NAME, null, values);
+        values.put(DatabaseHelper_phanloai.COLUMN_EXPENSE_NAME, name);
+        values.put(DatabaseHelper_phanloai.COLUMN_TYPE, type);
+        values.put(DatabaseHelper_phanloai.COLUMN_EXPENSE_IMG, img);
+        long newRowId = db.insert(DatabaseHelper_phanloai.TABLE_NAME, null, values);
         db.close();
 
         Toast.makeText(getContext(), "Thêm dữ liệu thành công!", Toast.LENGTH_SHORT).show();
     }
+//    viết hàm xóa dữ liệu
+//    private void deleteData() {
+
 
 
 
