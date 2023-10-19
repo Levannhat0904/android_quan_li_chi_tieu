@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "expense.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION =5;
 
     // Tên bảng và các cột trong bảng
     public static final String TABLE_NAME = "chi_tieu";
@@ -17,6 +17,8 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_NOTE = "note";
     public static final String COLUMN_DATE = "date";
+    public static final String COLUMN_TYPE = "type";
+
     public static final String COLUMN_CAT_ID = "cat_id"; // Cột khoá ngoại
 
     // Constructor
@@ -25,19 +27,20 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate( SQLiteDatabase db) {
-        // Tạo bảng
-        System.out.println("onCreate");
+    public void onCreate(SQLiteDatabase db) {
+        // Create the table
         String createTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_PRICE + " INTEGER NOT NULL, " +
                 COLUMN_NOTE + " TEXT NOT NULL, " +
                 COLUMN_DATE + " DATE, " +
                 COLUMN_CAT_ID + " INTEGER, " +
-                "FOREIGN KEY (" + COLUMN_CAT_ID + ") REFERENCES "+DatabaseHelper_phanloai.TABLE_NAME+
-                "("+DatabaseHelper_phanloai.COLUMN_ID+") ON DELETE CASCADE ON UPDATE CASCADE );";
+                COLUMN_TYPE + " TEXT, " + // Add the 'type' column
+                "FOREIGN KEY (" + COLUMN_CAT_ID + ") REFERENCES " + DatabaseHelper_phanloai.TABLE_NAME +
+                "(" + DatabaseHelper_phanloai.COLUMN_ID + ") ON DELETE CASCADE ON UPDATE CASCADE );";
         db.execSQL(createTableQuery);
     }
+
 
     public boolean deleteExpense(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -61,9 +64,9 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
         db.close();
     }
 //    viết hàm thêm dữ liệu
-    public void insertData(int price, String note, String date, int cat_id){
+    public void insertData(int price, String note, String date, int cat_id, String type){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "INSERT INTO "+ TABLE_NAME + " VALUES (NULL, '"+price+"', '"+note+"', '"+date+"', '"+cat_id+"');";
+        String query = "INSERT INTO "+ TABLE_NAME + " VALUES (NULL, '"+price+"', '"+note+"', '"+date+"', '"+cat_id+"', '"+type+"');";
         db.execSQL(query);
         db.close();
     }

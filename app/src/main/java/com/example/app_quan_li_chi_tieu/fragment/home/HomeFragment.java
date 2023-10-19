@@ -143,8 +143,8 @@ public class HomeFragment extends Fragment {
                 String dateString = cursor.getString(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_DATE));
 //                Date date = new Date(dateString); // Chuyển đổi ngày tháng từ chuỗi sang đối tượng Date
                 String note = cursor.getString(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_NOTE));
-
-                ChiTieu chiTieu = new ChiTieu(id, price, dateString, cat_id, note);
+                String type = cursor.getString(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_TYPE));
+                ChiTieu chiTieu = new ChiTieu(id, price, dateString, cat_id, note, type);
                 ChiTieuList.add(chiTieu);
             }
 

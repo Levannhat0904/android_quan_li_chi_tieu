@@ -86,6 +86,7 @@ public class CustomBottomSheetDialog_home extends BottomSheetDialog {
                         // Xử lý khi người dùng nhấp vào nút Xác nhận
                         // Lấy dữ liệu từ listview
                         int a =categoryAdapter.getItem(position).getId();
+                        String type =categoryAdapter.getItem(position).getType();
                         System.out.println(a);
                          editPrice = dialogView.findViewById(R.id.edit_price);
                          editTextNote = dialogView.findViewById(R.id.editTextNote);
@@ -103,9 +104,9 @@ public class CustomBottomSheetDialog_home extends BottomSheetDialog {
                         System.out.println("Ngày: " + dateText);
                         datePicker = findViewById(R.id.datePicker);
                         DatabaseHelper_chitieu databaseHelper = new DatabaseHelper_chitieu(getContext()); // Trong đó, context là đối tượng Context của ứng dụng của bạn.
-
+//                        String type = "ChiTieu";
                         // Lắng nghe sự kiện khi người dùng chọn ngày trên DatePicker
-                        databaseHelper.insertData(priceText,noteText,dateText,a);
+                        databaseHelper.insertData(priceText,noteText,dateText,a,type);
 
                     }
                 });

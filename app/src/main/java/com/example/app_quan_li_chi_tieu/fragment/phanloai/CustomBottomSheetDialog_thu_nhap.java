@@ -50,7 +50,7 @@ public class CustomBottomSheetDialog_thu_nhap extends BottomSheetDialog {
                 // Khi bấm vào ImageButton, quay lại hoạt động trước đó
                 EditText edt_loai = findViewById(R.id.editTextExpenseType);
 //                edt_loai.setText(resID_img + "");
-                String type = "thu_nhap";
+                String type = "ThuNhap";
                 addToDatabase(edt_loai.getText().toString(), resID_img, type);
                 dismiss();
             }

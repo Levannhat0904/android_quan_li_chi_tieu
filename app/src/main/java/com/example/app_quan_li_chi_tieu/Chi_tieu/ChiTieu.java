@@ -10,16 +10,26 @@ public class ChiTieu {
     private String date;
     private int cat_id;
     private String note;
+    private String type;
 
     public ChiTieu() {
     }
 
-    public ChiTieu(int id, int price, String date, int cat_id, String note) {
+    public ChiTieu(int id, int price, String date, int cat_id, String note, String type) {
         this.id = id;
         this.price = price;
         this.date = date;
         this.cat_id = cat_id;
         this.note = note;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getId() {
