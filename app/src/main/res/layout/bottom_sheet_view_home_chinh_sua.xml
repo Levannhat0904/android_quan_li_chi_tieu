@@ -46,6 +46,7 @@
             android:hint="Nhập số tiền"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
+            android:inputType="number"
             android:layout_marginBottom="10dp"
             android:id="@+id/so_tien"/>
     </LinearLayout>
@@ -64,7 +65,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nhập số tiền"
+            android:hint="Nhập ghi chú - tối đa 20 ký tự"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"

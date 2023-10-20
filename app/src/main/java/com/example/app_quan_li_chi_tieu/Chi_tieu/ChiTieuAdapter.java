@@ -13,6 +13,7 @@ import com.example.app_quan_li_chi_tieu.R;
 import com.example.app_quan_li_chi_tieu.DanhMuc.Category;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class ChiTieuAdapter extends ArrayAdapter<ChiTieu> {
@@ -28,7 +29,8 @@ public class ChiTieuAdapter extends ArrayAdapter<ChiTieu> {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_item_layout_home, parent, false);
         }
-
+        DecimalFormat df = new DecimalFormat("#,##0 VND");
+//        String formattedNumber = df.format(number);
         ChiTieu chiTieu = getItem(position);
         DatabaseHelper_phanloai databaseHelper_phanloai = new DatabaseHelper_phanloai(context);
         if (chiTieu != null) {
@@ -37,11 +39,13 @@ public class ChiTieuAdapter extends ArrayAdapter<ChiTieu> {
             TextView tV_date = convertView.findViewById(R.id.tv_date);
             TextView price = convertView.findViewById(R.id.tv_price);
             TextView note = convertView.findViewById(R.id.tv_note);
+            TextView tv_phanloai = convertView.findViewById(R.id.tv_phanloai);
+            tv_phanloai.setText(chiTieu.getType());
             Category category =databaseHelper_phanloai.getCategory(1);
             categoryName.setText(databaseHelper_phanloai.getCategory(chiTieu.getCat_id()).getName());
             categoryImage.setImageResource(databaseHelper_phanloai.getCategory(chiTieu.getCat_id()).getImage());
             tV_date.setText(chiTieu.getDate().toString());
-            price.setText(Integer.toString(chiTieu.getPrice()));
+            price.setText(df.format(chiTieu.getPrice()));
             note.setText(chiTieu.getNote());
 
 

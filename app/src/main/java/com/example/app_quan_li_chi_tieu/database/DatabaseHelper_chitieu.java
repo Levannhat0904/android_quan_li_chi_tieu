@@ -12,7 +12,7 @@ import com.example.app_quan_li_chi_tieu.Chi_tieu.ChiTieu;
 public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "expense.db";
-    private static final int DATABASE_VERSION =5;
+    private static final int DATABASE_VERSION =8;
 
     // Tên bảng và các cột trong bảng
     public static final String TABLE_NAME = "chi_tieu";
@@ -81,9 +81,10 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
         db.close();
     }
 //    viết hàm xóa dữ liệu
-    public void deleteData(int id){
+    public void delete_theo_phan_loai(int cat_id){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM "+ TABLE_NAME + " WHERE _id = '"+id+"';";
+        String query = "DELETE FROM "+ TABLE_NAME + " WHERE "+COLUMN_CAT_ID+" = "+cat_id+";";
+        System.out.println(query);
         db.execSQL(query);
         db.close();
     }

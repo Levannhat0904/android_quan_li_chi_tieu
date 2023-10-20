@@ -10,7 +10,7 @@ import com.example.app_quan_li_chi_tieu.DanhMuc.Category;
 public class DatabaseHelper_phanloai extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "expense.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 8;
 
     // Tên bảng và các cột trong bảng
     public static final String TABLE_NAME = "phanloai";

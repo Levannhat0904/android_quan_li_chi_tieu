@@ -19,6 +19,7 @@ import android.widget.ListView;
 import com.example.app_quan_li_chi_tieu.R;
 import com.example.app_quan_li_chi_tieu.DanhMuc.Category;
 import com.example.app_quan_li_chi_tieu.DanhMuc.CategoryAdapter;
+import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_chitieu;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
 
 import java.util.ArrayList;
@@ -152,18 +153,23 @@ public class ThunhapFragment extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
                     case 0:
-                        int s = category.getImage();
-                        Intent intent = new Intent(getContext(), Them_thu_nhap.class);
-                        intent.putExtra("data",s+"");
-                        startActivity(intent);
-                        // Xử lý tùy chọn sửa danh mục
-                        // Sử dụng category.getId() để biết danh mục nào đang được sửa
+                        int id_danhmuc = category.getId();
+                        CustomBottomSheetDialog_thu_nhap_chinhsua bottomSheetDialog = new CustomBottomSheetDialog_thu_nhap_chinhsua(getActivity(), id_danhmuc);
+                        View bottomSheetView = getLayoutInflater().inflate(R.layout.input_phanloai, null);
+                        bottomSheetDialog.setContentView(bottomSheetView);
+                        bottomSheetDialog.show();
+                        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                loadCategoryData();
+                            }
+                        });
                         break;
                     case 1:
-                        // Xử lý tùy chọn xóa danh mục
-                        // Sử dụng category.getId() để biết danh mục nào đang được xóa
                         int id = category.getId();
                         dbHelper.deleteExpense(id);
+                        DatabaseHelper_chitieu dbHelper1 = new DatabaseHelper_chitieu(getActivity());
+                        dbHelper1.delete_theo_phan_loai(id);
                         loadCategoryData();
                         break;
                 }
@@ -182,7 +188,7 @@ public class ThunhapFragment extends Fragment {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         try {
-            Cursor cursor = db.rawQuery("SELECT * FROM "+ DatabaseHelper_phanloai.TABLE_NAME+" WHERE type ='thu_nhap'", null);
+            Cursor cursor = db.rawQuery("SELECT * FROM "+ DatabaseHelper_phanloai.TABLE_NAME+" WHERE type ='ThuNhap'", null);
 
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper_phanloai.COLUMN_ID));

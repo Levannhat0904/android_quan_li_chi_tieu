@@ -21,27 +21,21 @@
         android:gravity="center_vertical"
         android:hint="Nhập ghi chú" />
 
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:textSize="20dp"-->
+<!--        android:background="#E6D3D3"-->
+<!--        android:gravity="center"-->
+<!--        android:text="Chọn ngày" />-->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="20dp"
-        android:textSize="20dp"
-        android:background="#E6D3D3"
-        android:gravity="center"
-        android:text="Chọn ngày" />
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:id="@+id/editTextDate"
+        android:id="@+id/tv_Date"
         android:hint="Nhập ngày"
         android:gravity="center_vertical"
-        android:ems="10"
-        android:inputType="date"/>
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_marginTop="30sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:ems="10"/>
 
 </LinearLayout>

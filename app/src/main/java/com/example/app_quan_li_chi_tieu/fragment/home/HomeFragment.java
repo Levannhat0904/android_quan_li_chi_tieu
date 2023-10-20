@@ -78,9 +78,17 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadCategoryData();
+    }
+
     public static HomeFragment newInstance() {
 
         return new HomeFragment();
+
     }
     private void initializeDatabaseHelper() {
         dbHelper_chitieu = new DatabaseHelper_chitieu(getActivity());

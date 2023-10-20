@@ -1,6 +1,7 @@
 package com.example.app_quan_li_chi_tieu.fragment.home;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -77,7 +79,21 @@ public class CustomBottomSheetDialog_home extends BottomSheetDialog {
                 // Sử dụng LayoutInflater để tạo một View cho InputDialogFragment
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 View dialogView = inflater.inflate(R.layout.dialog_input_home, null);
-
+                TextView tv_date = dialogView.findViewById(R.id.tv_Date);
+//                tv_date.setText("Ngày: ");
+                tv_date.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Lấy ngày hiện tại
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                                (sds, year, month, dayOfMonth) -> {
+                                    // Xử lý lấy ngày tháng năm
+                                    String date = dayOfMonth + "/" + (month + 1) + "/" + year;
+                                    tv_date.setText(date);
+                                }, 2021, 1, 1);
+                        datePickerDialog.show();
+                    }
+                });
                 // Tạo một AlertDialog để chứa dialogView
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
@@ -90,19 +106,18 @@ public class CustomBottomSheetDialog_home extends BottomSheetDialog {
                         System.out.println(a);
                          editPrice = dialogView.findViewById(R.id.edit_price);
                          editTextNote = dialogView.findViewById(R.id.editTextNote);
-                         editDate = dialogView.findViewById(R.id.editTextDate);
 
                         // Lấy dữ liệu đã nhập từ các trường EditText
                         int priceText =Integer.parseInt(editPrice.getText().toString().trim()) ;
                         String noteText = editTextNote.getText().toString();
-                        String dateText = editDate.getText().toString();
+                        String dateText = tv_date.getText().toString().trim();
 
                         // Bây giờ bạn có thể làm gì đó với các giá trị đã lấy được, ví dụ:
                         // In ra các giá trị đã nhập
                         System.out.println("Giá tiền: " + priceText);
                         System.out.println("Ghi chú: " + noteText);
                         System.out.println("Ngày: " + dateText);
-                        datePicker = findViewById(R.id.datePicker);
+//                        datePicker = findViewById(R.id.datePicker);
                         DatabaseHelper_chitieu databaseHelper = new DatabaseHelper_chitieu(getContext()); // Trong đó, context là đối tượng Context của ứng dụng của bạn.
 //                        String type = "ChiTieu";
                         // Lắng nghe sự kiện khi người dùng chọn ngày trên DatePicker
@@ -147,13 +162,13 @@ public class CustomBottomSheetDialog_home extends BottomSheetDialog {
             @Override
             public void onClick(View view) {
 //                hiển thị lv_bottom_sheet_home
-                System.out.println("thunhap");
+                System.out.println("ThuNhap");
 //                dbPhanLoaiHelper = new DatabaseHelper_phanloai(getContext());
                 ListView listView = findViewById(R.id.lv_bottom_sheet_home);
                 categoryAdapter = new CategoryAdapter(getContext(), new ArrayList<>());
 
                 listView.setAdapter(categoryAdapter);
-                loadCategoryData(DatabaseHelper_phanloai.TABLE_NAME,"thu_nhap");
+                loadCategoryData(DatabaseHelper_phanloai.TABLE_NAME,"ThuNhap");
             }
         });
     }

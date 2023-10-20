@@ -3,6 +3,7 @@ package com.example.app_quan_li_chi_tieu.fragment.home;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,7 +27,6 @@ public class CustomBottomSheetDialog_home_chinhsua extends BottomSheetDialog {
         super(context);
         this.id = id;
         setContentView(R.layout.bottom_sheet_view_home_chinh_sua);
-
     }
 
     @Override
@@ -39,6 +39,8 @@ public class CustomBottomSheetDialog_home_chinhsua extends BottomSheetDialog {
         ChiTieu chiTieu = dbHelper_chitieu.getData(id);
         EditText edt_price = findViewById(R.id.so_tien);
         EditText edt_note = findViewById(R.id.note);
+//        tạo giới hạn kí tự
+        edt_note.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         TextView edt_date = findViewById(R.id.date);
         ImageView icon = findViewById(R.id.icon);
         TextView txt_category = findViewById(R.id.category);
