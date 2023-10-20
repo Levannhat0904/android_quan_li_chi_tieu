@@ -1,10 +1,13 @@
 package com.example.app_quan_li_chi_tieu.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.NonNull;
+
+import com.example.app_quan_li_chi_tieu.Chi_tieu.ChiTieu;
 
 public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
 
@@ -71,9 +74,9 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
         db.close();
     }
 //    viết hàm cập nhật dữ liệu
-    public void updateData(int id, String price, String note, String date, String cat_id){
+    public void updateData(int id, int price, String note, String date, int cat_id, String type){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "UPDATE "+ TABLE_NAME + " SET price = '"+price+"', note = '"+note+"', date = '"+date+"', cat_id = '"+cat_id+"' WHERE _id = '"+id+"';";
+        String query = "UPDATE "+ TABLE_NAME + " SET price = '"+price+"', note = '"+note+"', date = '"+date+"', cat_id = '"+cat_id+"',type = '"+type+"' WHERE _id = '"+id+"';";
         db.execSQL(query);
         db.close();
     }
@@ -84,5 +87,23 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
         db.execSQL(query);
         db.close();
     }
-
+//    viết hàm lấy dữ liệu
+    public ChiTieu getData(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM "+ TABLE_NAME + " WHERE _id = '"+id+"';";
+        ChiTieu chiTieu = null;
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            int id1 = cursor.getInt(0);
+            int price = cursor.getInt(1);
+            String note = cursor.getString(2);
+            String date = cursor.getString(3);
+            int cat_id = cursor.getInt(4);
+            String type = cursor.getString(5);
+            chiTieu = new ChiTieu(id1, price, date, cat_id,note, type);
+        }
+        cursor.close();
+        db.close();
+        return chiTieu;
+    }
 }

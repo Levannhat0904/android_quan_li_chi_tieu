@@ -1,6 +1,8 @@
 package com.example.app_quan_li_chi_tieu.fragment.home;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,7 +22,9 @@ import com.example.app_quan_li_chi_tieu.DanhMuc.Category;
 import com.example.app_quan_li_chi_tieu.DanhMuc.CategoryAdapter;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_chitieu;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
+import com.example.app_quan_li_chi_tieu.fragment.phanloai.Them_chi_tieu;
 import com.example.app_quan_li_chi_tieu.fragment.phanloai.ThunhapFragment;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,6 +79,7 @@ public class HomeFragment extends Fragment {
         }
     }
     public static HomeFragment newInstance() {
+
         return new HomeFragment();
     }
     private void initializeDatabaseHelper() {
@@ -95,7 +100,48 @@ public class HomeFragment extends Fragment {
 //        hiển thị listview
         ListView listView = rootView.findViewById(R.id.lv_home);
         listView.setAdapter(chiTieuAdapter);
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            ChiTieu chitieu = chiTieuAdapter.getItem(position);
 
+                // Hiển thị dialog với các tùy chọn sửa hoặc xóa danh mục
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Tùy chọn danh mục");
+                builder.setItems(new CharSequence[]{"Sửa", "Xóa"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+                            case 0:
+//                                goi bottom sheet
+                                int id_chitieu = chitieu.getId();
+                                CustomBottomSheetDialog_home_chinhsua bottomSheetDialog = new CustomBottomSheetDialog_home_chinhsua(view.getContext(), id_chitieu);
+                                // Bây giờ, bạn cần gắn nội dung (layout) cho BottomSheetDialog.
+                                // Ví dụ, bạn có thể sử dụng LayoutInflater để nạp một tệp layout XML:
+                                View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_view_home_chinh_sua, null);
+                                // Gắn layout cho BottomSheetDialog
+                                bottomSheetDialog.setContentView(bottomSheetView);
+
+                                // Hiển thị BottomSheetDialog
+                                bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialogInterface) {
+                                        loadCategoryData();
+                                    }
+                                });
+                                bottomSheetDialog.show();
+
+                                break;
+                            case 1:
+                                // Sử dụng category.getId() để biết danh mục nào đang được xóa
+                                int id = chitieu.getId();
+                                dbHelper_chitieu.deleteExpense(id);
+                                loadCategoryData();
+                                break;
+                        }
+                    }
+                });
+                builder.show();
+                return true;
+        });
         rootView.findViewById(R.id.button_thaotac).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +151,6 @@ public class HomeFragment extends Fragment {
                 // Bây giờ, bạn cần gắn nội dung (layout) cho BottomSheetDialog.
                 // Ví dụ, bạn có thể sử dụng LayoutInflater để nạp một tệp layout XML:
                 View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_view_home, null);
-
                 // Gắn layout cho BottomSheetDialog
                 bottomSheetDialog.setContentView(bottomSheetView);
 
@@ -113,7 +158,7 @@ public class HomeFragment extends Fragment {
                 bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-//                        loadCategoryData();
+                        loadCategoryData();
                     }
                 });
                 bottomSheetDialog.show();
