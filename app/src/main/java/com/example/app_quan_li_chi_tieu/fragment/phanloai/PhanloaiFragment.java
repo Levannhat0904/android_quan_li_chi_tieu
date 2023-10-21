@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.app_quan_li_chi_tieu.R;
 import com.example.app_quan_li_chi_tieu.adapter_phanloai.viewpager_adapter_phanloai;
+import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -31,6 +32,10 @@ public class PhanloaiFragment extends Fragment {
     private String mParam2;
 
     public PhanloaiFragment() {
+
+//        DatabaseHelper_phanloai dbHelper = new DatabaseHelper_phanloai(getContext());
+//        dbHelper.onCreate(dbHelper.getWritableDatabase());
+
         // Required empty public constructor
     }
 
@@ -72,6 +77,8 @@ public class PhanloaiFragment extends Fragment {
         // Khởi tạo adapter và thiết lập cho ViewPager2
         viewpager_adapter_phanloai adapter = new viewpager_adapter_phanloai(this);
         mViewPager2.setAdapter(adapter);
+        DatabaseHelper_phanloai dbHelper = new DatabaseHelper_phanloai(getContext());
+        dbHelper.onCreate(dbHelper.getWritableDatabase());
 
         // Kết nối TabLayout và ViewPager2 với nhau
         new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> {

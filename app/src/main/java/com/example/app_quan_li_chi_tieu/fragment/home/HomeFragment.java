@@ -50,7 +50,9 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     public HomeFragment() {
-
+//        DatabaseHelper_chitieu dbHelper_chitieu;
+//        dbHelper_chitieu = new DatabaseHelper_chitieu(getContext());
+//        dbHelper_chitieu.onCreate(dbHelper_chitieu.getWritableDatabase());
     }
 
     /**
