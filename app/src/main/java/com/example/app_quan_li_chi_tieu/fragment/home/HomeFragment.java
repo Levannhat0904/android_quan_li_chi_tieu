@@ -2,32 +2,23 @@ package com.example.app_quan_li_chi_tieu.fragment.home;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.app_quan_li_chi_tieu.Chi_tieu.ChiTieu;
 import com.example.app_quan_li_chi_tieu.Chi_tieu.ChiTieuAdapter;
 import com.example.app_quan_li_chi_tieu.R;
-import com.example.app_quan_li_chi_tieu.DanhMuc.Category;
-import com.example.app_quan_li_chi_tieu.DanhMuc.CategoryAdapter;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_chitieu;
-import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
-import com.example.app_quan_li_chi_tieu.fragment.phanloai.Them_chi_tieu;
-import com.example.app_quan_li_chi_tieu.fragment.phanloai.ThunhapFragment;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -209,8 +200,6 @@ public class HomeFragment extends Fragment {
         } finally {
             db_chitieu.close();
         }
-
         return ChiTieuList;
     }
-
 }

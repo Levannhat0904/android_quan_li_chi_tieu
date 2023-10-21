@@ -8,9 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.app_quan_li_chi_tieu.DanhMuc.CategoryAdapter;
-import com.example.app_quan_li_chi_tieu.R;
 import com.example.app_quan_li_chi_tieu.DanhMuc.Category;
+import com.example.app_quan_li_chi_tieu.R;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
 
 import java.text.DecimalFormat;
@@ -47,8 +46,6 @@ public class ChiTieuAdapter extends ArrayAdapter<ChiTieu> {
             tV_date.setText(chiTieu.getDate().toString());
             price.setText(df.format(chiTieu.getPrice()));
             note.setText(chiTieu.getNote());
-
-
         }
         return convertView;
     }

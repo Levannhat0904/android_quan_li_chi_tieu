@@ -5,13 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
-
 import com.example.app_quan_li_chi_tieu.user.user;
 
 public class DatabaseHelper_user extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "expense.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 13;
 
     public DatabaseHelper_user(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

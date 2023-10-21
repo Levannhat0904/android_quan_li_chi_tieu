@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.app_quan_li_chi_tieu.fragment.home.HomeFragment;
 import com.example.app_quan_li_chi_tieu.fragment.phanloai.PhanloaiFragment;
+import com.example.app_quan_li_chi_tieu.fragment.thongke.ThongkeFragment;
 import com.example.app_quan_li_chi_tieu.fragment.user.infoFragment;
 
 public class MyViewpager2Adapter extends FragmentStateAdapter
