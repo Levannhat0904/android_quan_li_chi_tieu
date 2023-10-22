@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.app_quan_li_chi_tieu.DanhMuc.Category;
 
+import java.util.List;
+
 public class DatabaseHelper_phanloai extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "expense.db";
@@ -68,6 +70,37 @@ public class DatabaseHelper_phanloai extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("update "+ TABLE_NAME+" set "+COLUMN_EXPENSE_NAME+" = '"+name+"', "+COLUMN_TYPE+" = '"+type+"', "+COLUMN_EXPENSE_IMG+" = "+img+" where "+COLUMN_ID+" = "+id);
     }
+    //    viết hàm lấy dữ liệu tên phân loai và cho vào list
+    public List<String> getExpenseNameList(List<String> expenseNameList){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT "+COLUMN_EXPENSE_NAME+" FROM "+TABLE_NAME, null);
+        if (cursor.moveToFirst()){
+            do {
+                expenseNameList.add(cursor.getString(cursor.getColumnIndex(COLUMN_EXPENSE_NAME)));
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return expenseNameList;
+    }
+//    lấy id theo tên gần đúng phân loại và trả về mảng id
+    public int[] getExpenseId(String name){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT "+COLUMN_ID+" FROM "+TABLE_NAME+" WHERE "+COLUMN_EXPENSE_NAME+" LIKE '%"+name+"%'", null);
+        int[] id = new int[cursor.getCount()];
+        int i = 0;
+        if (cursor.moveToFirst()){
+            do {
+                id[i] = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+                System.out.println("id: "+id[i]);
+                i++;
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return id;
+    }
+
     public Category getCategory(int catId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME+" WHERE "+COLUMN_ID+" ='"+catId+"'", null);

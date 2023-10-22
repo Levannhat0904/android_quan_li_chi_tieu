@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +21,7 @@ import com.example.app_quan_li_chi_tieu.Chi_tieu.ChiTieu;
 import com.example.app_quan_li_chi_tieu.Chi_tieu.ChiTieuAdapter;
 import com.example.app_quan_li_chi_tieu.R;
 import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_chitieu;
+import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +38,8 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private DatabaseHelper_chitieu dbHelper_chitieu;
     private ChiTieuAdapter chiTieuAdapter;
+    private  ImageButton search;
+    private Cursor cursor;
 //    DatabaseHelper_chitieu db;
     private static final String ARG_PARAM2 = "param2";
 
@@ -75,7 +82,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadCategoryData();
+        loadCategoryData("");
     }
 
     public static HomeFragment newInstance() {
@@ -88,7 +95,7 @@ public class HomeFragment extends Fragment {
         chiTieuAdapter = new ChiTieuAdapter(getActivity(), new ArrayList<>());
 
         dbHelper_chitieu.getWritableDatabase(); // Mở cơ sở dữ liệu ở đây
-        loadCategoryData();
+        loadCategoryData("");
     }
 
     @Override
@@ -97,8 +104,36 @@ public class HomeFragment extends Fragment {
 //        loadCategoryData();
         // Inflate the layout for this fragment
         initializeDatabaseHelper();
+
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+//        lam chức năng tìm kiếm
+
+        AutoCompleteTextView editText = rootView.findViewById(R.id.edt_key);
+//                lấy các tên phân loaji cho vào list
+        List<String> list = new ArrayList<>();
+        DatabaseHelper_phanloai db_helper_phanloai = new DatabaseHelper_phanloai(getContext());
+        list = db_helper_phanloai.getExpenseNameList(list);
+        System.out.println(list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list);
+        editText.setAdapter(adapter);
+        editText.setThreshold(1);
 //        hiển thị listview
+
+         search = rootView.findViewById(R.id.btn_search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String text = editText.getText().toString();
+
+//                String text = editText.getText().toString();
+                if(text.equals("")){
+                    loadCategoryData("");
+                }else {
+                    loadCategoryData(text);
+                }
+            }
+        });
         ListView listView = rootView.findViewById(R.id.lv_home);
         listView.setAdapter(chiTieuAdapter);
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -125,7 +160,7 @@ public class HomeFragment extends Fragment {
                                 bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                     @Override
                                     public void onDismiss(DialogInterface dialogInterface) {
-                                        loadCategoryData();
+                                        loadCategoryData("");
                                     }
                                 });
                                 bottomSheetDialog.show();
@@ -135,7 +170,7 @@ public class HomeFragment extends Fragment {
                                 // Sử dụng category.getId() để biết danh mục nào đang được xóa
                                 int id = chitieu.getId();
                                 dbHelper_chitieu.deleteExpense(id);
-                                loadCategoryData();
+                                loadCategoryData("");
                                 break;
                         }
                     }
@@ -159,7 +194,7 @@ public class HomeFragment extends Fragment {
                 bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        loadCategoryData();
+                        loadCategoryData("");
                     }
                 });
                 bottomSheetDialog.show();
@@ -168,20 +203,45 @@ public class HomeFragment extends Fragment {
 
         return rootView;
     }
-    private void loadCategoryData() {
-        List<ChiTieu> ChiTieuList = getChiTieuDataFromSQLite();
+    private void loadCategoryData(String key_search) {
+        List<ChiTieu> ChiTieuList = getChiTieuDataFromSQLite(key_search);
         chiTieuAdapter.clear();
         chiTieuAdapter.addAll(ChiTieuList);
         chiTieuAdapter.notifyDataSetChanged();
     }
 
-    private List<ChiTieu> getChiTieuDataFromSQLite() {
+    private List<ChiTieu> getChiTieuDataFromSQLite(String key_search) {
         List<ChiTieu> ChiTieuList = new ArrayList<>();
         SQLiteDatabase db_chitieu = dbHelper_chitieu.getReadableDatabase();
-
         try {
-            Cursor cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME, null);
+            DatabaseHelper_phanloai db_helper_phanloai = new DatabaseHelper_phanloai(getContext());
+            if (key_search.equals("")) {
+
+                cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME, null);
+            } else {
+                try {
+                    int id_cat[] = db_helper_phanloai.getExpenseId(key_search);
+//                System.out.println(id_cat[0]);
+//                lấy các chi tiêu có trong mảng id
+                    String where = "`cat_id`";
+                    for (int i=0; i<id_cat.length;i++){
+                        where += " = " + id_cat[i]+" OR `cat_id`";
+                    }
+                    where = where.substring(0, where.length()-11);
+                    System.out.println(where);
+//                cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME + " WHERE " + where, null);
+//                cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME + " WHERE " + DatabaseHelper_chitieu.COLUMN_CAT_ID + " LIKE '%" + id_cat[0] + "%'", null);
+                    cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME + " WHERE " + where, null);
+                } catch (Exception e) {
+                    cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME, null);
+                }
+
+            }
 //
+//             cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME, null);
+//            cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME + " WHERE " + DatabaseHelper_chitieu.COLUMN_CAT_ID + " LIKE '%" + key_search + "%'", null);
+//            String sql = "SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME + " WHERE " + DatabaseHelper_chitieu.COLUMN_NOTE + " LIKE '%" + key_search + "%'";
+             ImageButton search = getActivity().findViewById(R.id.btn_search);
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_ID));
                 int price = cursor.getInt(cursor.getColumnIndex(DatabaseHelper_chitieu.COLUMN_PRICE));
