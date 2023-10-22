@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment {
     private DatabaseHelper_chitieu dbHelper_chitieu;
     private ChiTieuAdapter chiTieuAdapter;
     private  ImageButton search;
+    ArrayAdapter<String> adapter; //dùng cho autocomplete
     private Cursor cursor;
 //    DatabaseHelper_chitieu db;
     private static final String ARG_PARAM2 = "param2";
@@ -84,11 +85,13 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadCategoryData("");
+
     }
 
     public static HomeFragment newInstance() {
 
         return new HomeFragment();
+
 
     }
     private void initializeDatabaseHelper() {
@@ -115,8 +118,9 @@ public class HomeFragment extends Fragment {
         DatabaseHelper_phanloai db_helper_phanloai = new DatabaseHelper_phanloai(getContext());
         list = db_helper_phanloai.getExpenseNameList(list);
         System.out.println(list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list);
+         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list);
         editText.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         editText.setThreshold(1);
 //        hiển thị listview
 
@@ -197,16 +201,20 @@ public class HomeFragment extends Fragment {
                     }
                 });
                 bottomSheetDialog.show();
+//                adapter.notifyDataSetChanged();
+
             }
         });
 
         return rootView;
     }
     private void loadCategoryData(String key_search) {
+
         List<ChiTieu> ChiTieuList = getChiTieuDataFromSQLite(key_search);
         chiTieuAdapter.clear();
         chiTieuAdapter.addAll(ChiTieuList);
         chiTieuAdapter.notifyDataSetChanged();
+
     }
 
     private List<ChiTieu> getChiTieuDataFromSQLite(String key_search) {

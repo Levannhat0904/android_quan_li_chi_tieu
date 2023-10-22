@@ -68,8 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/edt_gioitinh"
-                android:hint="Nhập tuổi"
-                android:inputType="number"
+                android:hint="Nhập giới tính"
                 android:textSize="20sp"/>
         </LinearLayout>
         <LinearLayout
