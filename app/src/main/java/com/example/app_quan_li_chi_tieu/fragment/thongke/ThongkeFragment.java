@@ -159,9 +159,7 @@ public class ThongkeFragment extends Fragment {
         // Hiển thị tổng giá trị lên TextView tương ứng
         if (type.equals("ChiTieu")) {
             textViewChiTieu.setText(formattedTotal);
-//            textViewThuNhap.setText("0");
         } else {
-//            textViewChiTieu.setText("0");
             textViewThuNhap.setText(formattedTotal);
         }
     }

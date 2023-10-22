@@ -137,17 +137,21 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
             return db.rawQuery(query, new String[]{month, type});
         }
 //        hàm tính tổng sau khi lọc
-    public int getTotalPriceByMonthAndType(String month, String type) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        int total = 0;
-        String query = "SELECT SUM(" + COLUMN_PRICE + ") FROM " + TABLE_NAME +
-                " WHERE " + COLUMN_DATE + " LIKE '%" + month + "%' AND " +
-                COLUMN_TYPE + " = '" + type + "'";
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            total = cursor.getInt(0);
-        }
-        cursor.close();
-        return total;
+public int getTotalPriceByMonthAndType(String month, String type) {
+    SQLiteDatabase db = this.getReadableDatabase();
+    int total = 0;
+    // Lấy giá trị tháng từ chuỗi ngày tháng
+    String extractedMonth = "substr(" + COLUMN_DATE + ", instr(" + COLUMN_DATE + ", '/') + 1, instr(substr(" + COLUMN_DATE + ", instr(" + COLUMN_DATE + ", '/') + 1), '/') - 1)";
+    // Xây dựng câu truy vấn SELECT
+    String query = "SELECT SUM(" + COLUMN_PRICE + ") FROM " + TABLE_NAME +
+            " WHERE " + extractedMonth + " = ? AND " +
+            COLUMN_TYPE + " = ?";
+    // Thực hiện truy vấn
+    Cursor cursor = db.rawQuery(query, new String[]{month, type});
+    if (cursor.moveToFirst()) {
+        total = cursor.getInt(0);
     }
+    cursor.close();
+    return total;
+}
 }
