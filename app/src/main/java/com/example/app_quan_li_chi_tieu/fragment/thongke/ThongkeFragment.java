@@ -91,6 +91,7 @@ public class ThongkeFragment extends Fragment {
                 displayChiTieuData();
                 TextView textViewDS = getView().findViewById(R.id.ds);
                 textViewDS.setText("Danh sách chi tiêu");
+                onResume();
             }
         });
         btnThuNhap.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +100,7 @@ public class ThongkeFragment extends Fragment {
                 displayThuNhapData();
                 TextView textViewDS = getView().findViewById(R.id.ds);
                 textViewDS.setText("Danh sách thu nhập");
+                onResume();
             }
         });
         return view;
@@ -136,19 +138,32 @@ public class ThongkeFragment extends Fragment {
     private void displayFilteredData(String month, String type) {
         // Tạo đối tượng DatabaseHelper_chitieu
         DatabaseHelper_chitieu databaseHelper = new DatabaseHelper_chitieu(getContext());
-
         // Lấy dữ liệu từ cơ sở dữ liệu theo tháng và loại
         Cursor cursor = databaseHelper.getDataByMonthAndType(month, type);
-
         // Tạo một SimpleCursorAdapter để ánh xạ dữ liệu từ Cursor vào ListView
         String[] fromColumns = {DatabaseHelper_chitieu.COLUMN_PRICE, DatabaseHelper_chitieu.COLUMN_NOTE, DatabaseHelper_chitieu.COLUMN_DATE};
         int[] toViews = {R.id.txt_price, R.id.txt_note, R.id.txt_date};
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(getContext(), R.layout.list_item, cursor, fromColumns, toViews, 0);
         // Ánh xạ ListView trong fragment_thongke.xml
         ListView listView = getView().findViewById(R.id.lv_tk);
-
         // Đặt adapter cho ListView để hiển thị dữ liệu
         listView.setAdapter(adapter);
+        // Tính tổng giá trị sau khi hiển thị dữ liệu lọc
+        int total = databaseHelper.getTotalPriceByMonthAndType(month, type);
+        // Tìm và ánh xạ TextView "chitieu" và TextView "thunhap"
+        TextView textViewChiTieu = getView().findViewById(R.id.chitieu);
+        TextView textViewThuNhap = getView().findViewById(R.id.thunhap);
+        // Định dạng lại tổng giá trị thành dạng 30.000
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedTotal = decimalFormat.format(total);
+        // Hiển thị tổng giá trị lên TextView tương ứng
+        if (type.equals("ChiTieu")) {
+            textViewChiTieu.setText(formattedTotal);
+//            textViewThuNhap.setText("0");
+        } else {
+//            textViewChiTieu.setText("0");
+            textViewThuNhap.setText(formattedTotal);
+        }
     }
     private void displayThuNhapData() {
         // Tạo đối tượng DatabaseHelper_chitieu

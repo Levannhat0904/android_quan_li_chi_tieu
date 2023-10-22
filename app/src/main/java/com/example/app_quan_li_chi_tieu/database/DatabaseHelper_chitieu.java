@@ -19,9 +19,7 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
     public static final String COLUMN_NOTE = "note";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_TYPE = "type";
-
     public static final String COLUMN_CAT_ID = "cat_id"; // Cột khoá ngoại
-
     // Constructor
     public DatabaseHelper_chitieu(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -117,7 +115,6 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
         db.close();
         return totalPrice;
     }
-
     public void delete_theo_phan_loai(int cat_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "DELETE FROM "+ TABLE_NAME + " WHERE "+COLUMN_CAT_ID+" = "+cat_id+";";
@@ -130,36 +127,27 @@ public class DatabaseHelper_chitieu extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_TYPE + " = '" + type + "';";
         return db.rawQuery(query, null);
     }
-//public Cursor getDataByMonthAndType(String month, String type) {
-//    SQLiteDatabase db = this.getReadableDatabase();
-//
-//    // Xử lý giá trị tháng nếu chỉ có một chữ số
-//    if (month.length() == 1) {
-//        month = "0" + month; // Thêm ký tự "0" vào trước giá trị tháng
-//    }
-//
-//    // Xây dựng câu truy vấn SELECT
-//    String query = "SELECT * FROM " + TABLE_NAME + " WHERE (substr(" + COLUMN_DATE + ", 4, 2) = ? OR substr(" + COLUMN_DATE + ", 3, 2) = ? OR substr(" + COLUMN_DATE + ", 2, 2) = ?) AND " + COLUMN_TYPE + " = ?";
-//
-//    // Thực hiện truy vấn
-//    return db.rawQuery(query, new String[]{month, month, month, type});
-//}
-public Cursor getDataByMonthAndType(String month, String type) {
-    SQLiteDatabase db = this.getReadableDatabase();
-
-    // Xử lý giá trị tháng nếu chỉ có một chữ số
-//    if (month.length() == 1) {
-//        month = "0" + month; // Thêm ký tự "0" vào trước giá trị tháng
-//    }
-
-    // Lấy giá trị tháng từ chuỗi ngày tháng
-    String extractedMonth = "substr(" + COLUMN_DATE + ", instr(" + COLUMN_DATE + ", '/') + 1, instr(substr(" + COLUMN_DATE + ", instr(" + COLUMN_DATE + ", '/') + 1), '/') - 1)";
-
-    // Xây dựng câu truy vấn SELECT
-    String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + extractedMonth + " = ? AND " + COLUMN_TYPE + " = ?";
-
-    // Thực hiện truy vấn
-    return db.rawQuery(query, new String[]{month, type});
-}
-
+        public Cursor getDataByMonthAndType(String month, String type) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            // Lấy giá trị tháng từ chuỗi ngày tháng
+            String extractedMonth = "substr(" + COLUMN_DATE + ", instr(" + COLUMN_DATE + ", '/') + 1, instr(substr(" + COLUMN_DATE + ", instr(" + COLUMN_DATE + ", '/') + 1), '/') - 1)";
+            // Xây dựng câu truy vấn SELECT
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + extractedMonth + " = ? AND " + COLUMN_TYPE + " = ?";
+            // Thực hiện truy vấn
+            return db.rawQuery(query, new String[]{month, type});
+        }
+//        hàm tính tổng sau khi lọc
+    public int getTotalPriceByMonthAndType(String month, String type) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int total = 0;
+        String query = "SELECT SUM(" + COLUMN_PRICE + ") FROM " + TABLE_NAME +
+                " WHERE " + COLUMN_DATE + " LIKE '%" + month + "%' AND " +
+                COLUMN_TYPE + " = '" + type + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            total = cursor.getInt(0);
+        }
+        cursor.close();
+        return total;
+    }
 }
