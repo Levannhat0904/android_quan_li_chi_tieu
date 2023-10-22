@@ -30,6 +30,7 @@ import com.example.app_quan_li_chi_tieu.database.DatabaseHelper_phanloai;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class CustomBottomSheetDialog_home extends BottomSheetDialog {
@@ -80,6 +81,11 @@ public class CustomBottomSheetDialog_home extends BottomSheetDialog {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 View dialogView = inflater.inflate(R.layout.dialog_input_home, null);
                 TextView tv_date = dialogView.findViewById(R.id.tv_Date);
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
 //                tv_date.setText("Ngày: ");
                 tv_date.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -90,7 +96,7 @@ public class CustomBottomSheetDialog_home extends BottomSheetDialog {
                                     // Xử lý lấy ngày tháng năm
                                     String date = dayOfMonth + "/" + (month + 1) + "/" + year;
                                     tv_date.setText(date);
-                                }, 2021, 1, 1);
+                                }, year, month, dayOfMonth);
                         datePickerDialog.show();
                     }
                 });

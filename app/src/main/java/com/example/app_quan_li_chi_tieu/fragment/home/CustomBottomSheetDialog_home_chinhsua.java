@@ -65,9 +65,14 @@ public class CustomBottomSheetDialog_home_chinhsua extends BottomSheetDialog {
             dismiss();
         });
         edt_date.setOnClickListener(v -> {
+            String date = edt_date.getText().toString();
+            String[] arr = date.split("/");
+            int mday = Integer.parseInt(arr[0]);
+            int mmonth = Integer.parseInt(arr[1]);
+            int myear = Integer.parseInt(arr[2]);
             DatePickerDialog datePickerDialog = new DatePickerDialog( getContext(), (view, year, month, dayOfMonth) -> {
                 edt_date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-            }, 2020, 11, 20);
+            }, myear, mmonth, mday);
 //            datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
 //                edt_date.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
 //            });
