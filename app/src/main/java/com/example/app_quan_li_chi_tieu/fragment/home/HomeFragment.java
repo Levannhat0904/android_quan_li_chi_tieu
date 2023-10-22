@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -150,8 +151,6 @@ public class HomeFragment extends Fragment {
 //                                goi bottom sheet
                                 int id_chitieu = chitieu.getId();
                                 CustomBottomSheetDialog_home_chinhsua bottomSheetDialog = new CustomBottomSheetDialog_home_chinhsua(view.getContext(), id_chitieu);
-                                // Bây giờ, bạn cần gắn nội dung (layout) cho BottomSheetDialog.
-                                // Ví dụ, bạn có thể sử dụng LayoutInflater để nạp một tệp layout XML:
                                 View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_view_home_chinh_sua, null);
                                 // Gắn layout cho BottomSheetDialog
                                 bottomSheetDialog.setContentView(bottomSheetView);
@@ -233,6 +232,8 @@ public class HomeFragment extends Fragment {
 //                cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME + " WHERE " + DatabaseHelper_chitieu.COLUMN_CAT_ID + " LIKE '%" + id_cat[0] + "%'", null);
                     cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME + " WHERE " + where, null);
                 } catch (Exception e) {
+                    Toast toast = Toast.makeText(getContext(), "Không tìm thấy kết quả", Toast.LENGTH_SHORT);
+                    toast.show();
                     cursor = db_chitieu.rawQuery("SELECT * FROM " + DatabaseHelper_chitieu.TABLE_NAME, null);
                 }
 
